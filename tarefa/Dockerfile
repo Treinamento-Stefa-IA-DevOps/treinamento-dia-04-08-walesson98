@@ -1,10 +1,8 @@
 FROM python:3.8-slim
 #FROM centos/python-36-centos7
 
-RUN pip install scikit-learn
-
 RUN pip install pandas
-
+RUN pip install pandas sklearn
 RUN pip install fastapi uvicorn
 
 COPY . /app

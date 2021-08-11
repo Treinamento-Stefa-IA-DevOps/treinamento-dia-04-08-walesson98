@@ -1,32 +1,30 @@
 import pickle
 from fastapi import FastAPI
-import numpy as np
+import pandas as pd
 
 app = FastAPI()
+@app.post('/model')
+## Coloque seu codigo na função abaixo
+def titanic(Sex:int, Age:float, Lifeboat:int, Pclass:int):
+    #with open('./model/Titanic.pkl', 'rb') as fid: 
+        #titanic = pickle.load(fid)
+    
+    titanic = pickle.load(open('app/model/Titanic.pkl','rb'))
+   
+    df = pd.DataFrame([[Age, Lifeboat, Pclass, Sex]], columns =['Age', 'Lifeboat', 'Pclass', 'Sex'])
 
-model = pickle.load(open('app/model/Titanic.pkl','rb'))
+    y = titanic.predict(df)
+
+    response = {
+                "survived": bool(y[0]),
+                "status": 200,  
+                "message": "SUCCESS",    
+               }
+    return response
 
 @app.get('/model')
-def get ():
-    return
-
-@app.post('/model/')
-def titanic(Sex:int, Age: float, Lifeboat: int, Pclass: int):
-    
-    teste = np.array([[Sex,Age,Lifeboat,Pclass]])
-
-    classe = model.predict(teste)[0]
-
-    if(classe==1):
-        return {"survived": classe,
-	            "status": "int",
-                "message": "Sobreviveu"
-        }
-    else:
-        return {"survived": classe,
-	            "status": "int",
-                "message": "Não Sobreviveu"
-                }
+def get():
+    return {'hello':'test'}
 
 
 
